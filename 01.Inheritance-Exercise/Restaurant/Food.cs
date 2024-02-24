@@ -14,6 +14,7 @@ namespace Restaurant
             Grams = grams;
         }
 
+
         public double Grams { get; set; }   
     }
 }

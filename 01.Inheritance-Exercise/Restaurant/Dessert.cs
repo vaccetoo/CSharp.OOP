@@ -14,6 +14,7 @@ namespace Restaurant
             Calories = calories;
         }
 
+
         public double Calories { get; set; }   
     }
 }

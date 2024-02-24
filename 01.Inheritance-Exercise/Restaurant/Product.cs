@@ -8,7 +8,7 @@ namespace Restaurant
 {
     public abstract class Product
     {
-        protected Product(string name, decimal price)
+        public Product(string name, decimal price)
         {
             Name = name;
             Price = price;
