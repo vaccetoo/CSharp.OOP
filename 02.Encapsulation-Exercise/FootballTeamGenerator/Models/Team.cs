@@ -30,7 +30,7 @@ namespace FootballTeamGenerator.Models
         }
 
 
-        public List<Player> Players { get => players; }
+        public IReadOnlyCollection<Player> Players => players;
 
         private double TeamRating
             => players.Sum(r => r.GetStats) / players.Count;
@@ -40,16 +40,12 @@ namespace FootballTeamGenerator.Models
             players.Add(player);
         }
 
-        public bool RemovePlayer(Player player)
+        public void RemovePlayer(string player)
         {
-            if (players.Contains(player))
+            if (players.Any(n => n.Name == player))
             {
-                players.Remove(player);
-                return true;
+                players.RemoveAll(n => n.Name == player);
             }
-
-            Console.WriteLine($"Player {player.Name} is not in {Name} team.");
-            return false;
         }
 
         public override string ToString()

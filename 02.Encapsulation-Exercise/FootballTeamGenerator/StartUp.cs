@@ -59,15 +59,18 @@ public class StartUp
                     string teamName = commandInfo[1];
                     string playerName = commandInfo[2];
 
-                    foreach (var team in teams)
+                    foreach (Team team in teams)
                     {
-                        if (team.Players.Any(n => n.Name == playerName))
+                        if (team.Name == teamName)
                         {
-                            team.Players.RemoveAll(p => p.Name == playerName);
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Player {playerName} is not in {teamName} team.");
+                            if (team.Players.Any(n => n.Name == playerName))
+                            {
+                                team.RemovePlayer(playerName);
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Player {playerName} is not in {teamName} team.");
+                            }
                         }
                     }
                 }
