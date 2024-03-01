@@ -5,7 +5,9 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersonInfo", "PersonInfo\PersonInfo.csproj", "{2A35DA9C-E74B-4368-8771-338634409BB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telephony", "Telephony\Telephony.csproj", "{84A83A24-C92D-4B1E-9F5C-DA001DF611C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Telephony", "Telephony\Telephony.csproj", "{84A83A24-C92D-4B1E-9F5C-DA001DF611C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BorderControl", "BorderControl\BorderControl.csproj", "{4CA732B2-AF4D-4853-800A-453A4C565634}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{84A83A24-C92D-4B1E-9F5C-DA001DF611C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84A83A24-C92D-4B1E-9F5C-DA001DF611C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84A83A24-C92D-4B1E-9F5C-DA001DF611C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CA732B2-AF4D-4853-800A-453A4C565634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CA732B2-AF4D-4853-800A-453A4C565634}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CA732B2-AF4D-4853-800A-453A4C565634}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CA732B2-AF4D-4853-800A-453A4C565634}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
