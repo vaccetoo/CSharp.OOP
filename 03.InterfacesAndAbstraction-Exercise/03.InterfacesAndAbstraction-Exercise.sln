@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BorderControl", "BorderCont
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodShortage", "FoodShortage\FoodShortage.csproj", "{514C1E1A-E90A-4C02-9E9C-C4073726F797}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MilitaryElite", "MilitaryElite\MilitaryElite.csproj", "{C84CF440-2900-45AF-8A7B-B4347CBECAD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MilitaryElite", "MilitaryElite\MilitaryElite.csproj", "{C84CF440-2900-45AF-8A7B-B4347CBECAD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionHierarchy", "CollectionHierarchy\CollectionHierarchy.csproj", "{0B5886E9-7E33-4E3F-BDBE-210664546D46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{C84CF440-2900-45AF-8A7B-B4347CBECAD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C84CF440-2900-45AF-8A7B-B4347CBECAD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C84CF440-2900-45AF-8A7B-B4347CBECAD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B5886E9-7E33-4E3F-BDBE-210664546D46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B5886E9-7E33-4E3F-BDBE-210664546D46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B5886E9-7E33-4E3F-BDBE-210664546D46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B5886E9-7E33-4E3F-BDBE-210664546D46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
