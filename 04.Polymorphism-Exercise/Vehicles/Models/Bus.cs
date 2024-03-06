@@ -14,21 +14,5 @@ namespace Vehicles.Models
             : base(fuelQuantity, fuelConsumption, tankCapacity, IncreasedConsumption)
         {
         }
-
-        public string DriveEmptyBus(double distance)
-        {
-            if (FuelQuantity <= FuelConsumption * distance)
-            {
-                FuelQuantity -= FuelConsumption * distance;
-
-                return $"{GetType().Name} travelled {distance} km";
-            }
-
-            throw new ArgumentException($"{GetType().Name} needs refueling");
-        }
-
-
-        public override string ToString()
-            => $"Bus: {FuelQuantity:f2}";
     }
 }

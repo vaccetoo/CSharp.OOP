@@ -14,8 +14,5 @@ namespace Vehicles.Models
             : base(fuelQuantity, fuelConsumption, tankCapacity, IncreasedConsumption)
         {
         }
-
-        public override string ToString()
-            => $"Car: {FuelQuantity:f2}";
     }
 }

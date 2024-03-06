@@ -14,7 +14,7 @@ namespace Vehicles.Models.Interfaces
 
         public double TankCapacity { get; }    
 
-        string Drive(double distance);
+        string Drive(double distance, bool isIncreasedConsumption = true);
 
         void Refuel(double amount);
     }

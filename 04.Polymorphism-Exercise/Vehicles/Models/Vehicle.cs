@@ -13,29 +13,26 @@ namespace Vehicles.Models
         private double increasedConsumption;
         private double fuelQuantity;
 
-
-        public Vehicle(double fuelQuantity, double fuelConsumption, double tankCapacity, double increasedConsumption)
+        protected Vehicle(double fuelQuantity, double fuelConsumption, double tankCapacity, double increasedConsumption)
         {
-            FuelConsumption = fuelConsumption;
-            FuelQuantity = fuelQuantity;
             TankCapacity = tankCapacity;
+            FuelQuantity = fuelQuantity;
+            FuelConsumption = fuelConsumption;
             this.increasedConsumption = increasedConsumption;
         }
-
 
         public double FuelQuantity
         {
             get => fuelQuantity;
-
-            protected set
+            private set
             {
-                if (FuelQuantity <= TankCapacity)
+                if (TankCapacity < value)
                 {
-                    fuelQuantity = value;
+                    fuelQuantity = 0;
                 }
                 else
                 {
-                    fuelQuantity = 0;
+                    fuelQuantity = value;
                 }
             }
         }
@@ -44,35 +41,40 @@ namespace Vehicles.Models
 
         public double TankCapacity { get; private set; }
 
-        public string Drive(double distance)
+        public string Drive(double distance, bool isIncreasedConsumption = true)
         {
-            if (FuelQuantity >= (FuelConsumption + increasedConsumption) * distance)
-            {
-                FuelQuantity -= (FuelConsumption + increasedConsumption) * distance;
+            double consumption = isIncreasedConsumption
+                ? FuelConsumption + increasedConsumption
+                : FuelConsumption;
 
-                return $"{GetType().Name} travelled {distance} km";
+            if (FuelQuantity < distance * consumption)
+            {
+                throw new ArgumentException($"{this.GetType().Name} needs refueling");
             }
 
-            throw new ArgumentException($"{GetType().Name} needs refueling");
+            FuelQuantity -= distance * consumption;
+
+            return $"{this.GetType().Name} travelled {distance} km";
         }
 
         public virtual void Refuel(double amount)
         {
-            if (amount > 0)
-            {
-                if (FuelQuantity + amount <= TankCapacity)
-                {
-                    FuelQuantity += amount;
-                }
-                else
-                {
-                    throw new ArgumentException($"Cannot fit {amount} fuel in the tank");
-                }
-            }
-            else
+            if (amount <= 0)
             {
                 throw new ArgumentException("Fuel must be a positive number");
             }
+
+            if (amount + FuelQuantity > TankCapacity)
+            {
+                throw new ArgumentException($"Cannot fit {amount} fuel in the tank");
+            }
+
+            FuelQuantity += amount;
+        }
+
+        public override string ToString()
+        {
+            return $"{this.GetType().Name}: {FuelQuantity:F2}";
         }
     }
 }

@@ -17,9 +17,13 @@ namespace Vehicles.Models
         }
 
         public override void Refuel(double amount)
-            => base.Refuel(amount * 0.95);
+        {
+            if (amount + FuelQuantity > TankCapacity)
+            {
+                throw new ArgumentException($"Cannot fit {amount} fuel in the tank");
+            }
 
-        public override string ToString()
-            => $"Truck: {FuelQuantity:f2}";
+            base.Refuel(amount * 0.95);
+        }
     }
 }
