@@ -9,7 +9,7 @@ namespace HighwayToPeak.Models
 {
     public class BaseCamp : IBaseCamp
     {
-        private List<string> residents;
+        private readonly List<string> residents;
 
         public BaseCamp()
         {

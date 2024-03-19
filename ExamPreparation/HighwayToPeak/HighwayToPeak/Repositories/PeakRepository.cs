@@ -1,4 +1,5 @@
-﻿using HighwayToPeak.Models.Contracts;
+﻿using HighwayToPeak.Models;
+using HighwayToPeak.Models.Contracts;
 using HighwayToPeak.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,12 @@ namespace HighwayToPeak.Repositories
 {
     public class PeakRepository : IRepository<IPeak>
     {
-        private List<IPeak> peaks;
+        private readonly List<IPeak> peaks;
+
+        public PeakRepository()
+        {
+            peaks = new List<IPeak>();
+        }
 
         public IReadOnlyCollection<IPeak> All
             => peaks;

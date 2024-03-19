@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace HighwayToPeak.Core
 {
@@ -45,34 +46,152 @@ namespace HighwayToPeak.Core
 
             peakRepository.Add(peak);
 
-            //TODO: Is retyrnType correct
-            return $"{name} is allowed for international climbing. See details in {typeof(PeakRepository)}."
+            return $"{name} is allowed for international climbing. See details in {typeof(PeakRepository).Name}."
 ;
         }
 
         public string AttackPeak(string climberName, string peakName)
         {
-            throw new NotImplementedException();
+            IReadOnlyCollection<IClimber> climbers = climberRepository.All;
+            IReadOnlyCollection<IPeak> peaks = peakRepository.All;
+            IReadOnlyCollection<string> bCamp = baseCamp.Residents;
+
+            if (!climbers.Any(c => c.Name == climberName))
+            {
+                return $"Climber - {climberName}, has not arrived at the BaseCamp yet.";
+            }
+
+            if (!peaks.Any(p => p.Name == peakName))
+            {
+                return $"{peakName} is not allowed for international climbing.";
+            }
+
+            if (!bCamp.Contains(climberName))
+            {
+                return $"{climberName} not found for gearing and instructions. The attack of {peakName} will be postponed.";
+            }
+
+            IPeak currentPeak = peaks.First(p => p.Name == peakName);
+            IClimber currentClimber = climbers.First(c => c.Name == climberName);
+
+            if (currentPeak.DifficultyLevel == "Extreme" && currentClimber.GetType().Name == "NaturalClimber")
+            {
+                return $"{climberName} does not cover the requirements for climbing {peakName}.";
+            }
+
+            baseCamp.LeaveCamp(climberName);
+            currentClimber.Climb(currentPeak);
+
+            if (currentClimber.Stamina <= 0)
+            {
+                return $"{climberName} did not return to BaseCamp.";
+            }
+            else
+            {
+                baseCamp.ArriveAtCamp(climberName);
+
+                return $"{climberName} successfully conquered {peakName} and returned to BaseCamp.";
+            }
+
         }
 
         public string BaseCampReport()
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+
+            IReadOnlyCollection<string> bCamp = baseCamp.Residents;
+            IReadOnlyCollection<IClimber> climbers = climberRepository.All;
+
+            if (bCamp.Count > 0)
+            {
+                sb.AppendLine($"BaseCamp residents:");
+
+                foreach (string climberInBaseCamp in bCamp)
+                {
+                    foreach (IClimber climber in climbers.Where(c => c.Name == climberInBaseCamp))
+                    {
+                        sb.AppendLine($"Name: {climber.Name}, Stamina: {climber.Stamina}, Count of Conquered Peaks: {climber.ConqueredPeaks.Count}");
+                    }
+                }
+
+                return sb.ToString().TrimEnd();
+            }
+
+            return $"BaseCamp is currently empty.";
         }
 
         public string CampRecovery(string climberName, int daysToRecover)
         {
-            throw new NotImplementedException();
+            IReadOnlyCollection<string> bCamp = baseCamp.Residents;
+            IReadOnlyCollection<IClimber> climbers = climberRepository.All;
+
+            IClimber currentClimber = climbers.First(c => c.Name == climberName);
+
+            if (!bCamp.Contains(climberName))
+            {
+                return $"{climberName} not found at the BaseCamp.";
+            }
+
+            if (currentClimber.Stamina == 10)
+            {
+                return $"{climberName} has no need of recovery.";
+            }
+
+            currentClimber.Rest(daysToRecover);
+            return $"{climberName} has been recovering for {daysToRecover} days and is ready to attack the mountain.";
         }
 
         public string NewClimberAtCamp(string name, bool isOxygenUsed)
         {
-            throw new NotImplementedException();
+            IClimber climber;
+
+            if (isOxygenUsed)
+            {
+                climber = new OxygenClimber(name);
+            }
+            else
+            {
+                climber = new NaturalClimber(name);
+            }
+
+            IReadOnlyCollection<IClimber> climbers = climberRepository.All;
+
+            if (climbers.Any(c => c.Name == name))
+            {
+                return $"{name} is a participant in {typeof(ClimberRepository).Name} and cannot be duplicated.";
+            }
+
+            climberRepository.Add(climber);
+            baseCamp.ArriveAtCamp(climber.Name);
+
+            return $"{name} has arrived at the BaseCamp and will wait for the best conditions.";
         }
 
         public string OverallStatistics()
         {
-            throw new NotImplementedException();
+            IReadOnlyCollection<IClimber> climbers = climberRepository.All;
+            IReadOnlyCollection<IPeak> currentPeaks = peakRepository.All;
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("***Highway-To-Peak***");
+
+            foreach (IClimber climber in climbers
+                .OrderByDescending(c => c.ConqueredPeaks.Count)
+                .ThenBy(c => c.Name))
+            {
+                sb.AppendLine(climber.ToString());
+
+                foreach (IPeak peak in currentPeaks
+                    .OrderByDescending(p => p.Elevation))
+                {
+                    foreach (string item in climber.ConqueredPeaks.Where(item => item == peak.Name))
+                    {
+                        sb.AppendLine(peak.ToString());
+                    }
+                }
+            }
+
+            return sb.ToString().TrimEnd();
         }
     }
 }

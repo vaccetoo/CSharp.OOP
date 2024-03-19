@@ -12,6 +12,11 @@ namespace HighwayToPeak.Repositories
     {
         private readonly List<IClimber> climbers;
 
+        public ClimberRepository()
+        {
+            climbers = new List<IClimber>();
+        }
+
         public IReadOnlyCollection<IClimber> All 
             => climbers;
 
