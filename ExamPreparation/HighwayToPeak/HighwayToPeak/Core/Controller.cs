@@ -125,12 +125,12 @@ namespace HighwayToPeak.Core
             IReadOnlyCollection<string> bCamp = baseCamp.Residents;
             IReadOnlyCollection<IClimber> climbers = climberRepository.All;
 
-            IClimber currentClimber = climbers.First(c => c.Name == climberName);
-
             if (!bCamp.Contains(climberName))
             {
                 return $"{climberName} not found at the BaseCamp.";
             }
+
+            IClimber currentClimber = climbers.First(c => c.Name == climberName);
 
             if (currentClimber.Stamina == 10)
             {
