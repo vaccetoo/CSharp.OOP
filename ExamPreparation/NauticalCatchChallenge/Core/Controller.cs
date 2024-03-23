@@ -74,8 +74,6 @@ namespace NauticalCatchChallenge.Core
 
                 return $"{diverName} hits a {fish.Points}pt. {fishName}.";
             }
-
-
         }
 
         public string CompetitionStatistics()

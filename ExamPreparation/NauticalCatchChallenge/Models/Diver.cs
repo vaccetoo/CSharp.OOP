@@ -84,14 +84,7 @@ namespace NauticalCatchChallenge.Models
 
         public void UpdateHealthStatus()
         {
-            if (!hasHealthIssue)
-            {
-                hasHealthIssue = true;
-            }
-            else
-            {
-                hasHealthIssue = false;
-            }
+            hasHealthIssue = !hasHealthIssue;
         }
 
 
