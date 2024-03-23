@@ -1,6 +1,7 @@
 ﻿namespace NauticalCatchChallenge.IO
 {
     using System;
+    using System.Threading.Channels;
     using NauticalCatchChallenge.IO.Contracts;
     public class Writer : IWriter
     {

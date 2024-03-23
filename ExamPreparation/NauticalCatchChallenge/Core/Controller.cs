@@ -25,12 +25,74 @@ namespace NauticalCatchChallenge.Core
 
         public string ChaseFish(string diverName, string fishName, bool isLucky)
         {
-            throw new NotImplementedException();
+            IReadOnlyCollection<IDiver> divers = diverRepository.Models;
+            IReadOnlyCollection<IFish> allFish = fishRepository.Models;
+
+            if (!divers.Any(d => d.Name == diverName))
+            {
+                return $"{typeof(DiverRepository).Name} has no {diverName} registered for the competition.";
+            }
+
+            if (!allFish.Any(f => f.Name == fishName))
+            {
+                return $"{fishName} is not allowed to be caught in this competition.";
+            }
+
+            IDiver diver = divers.First(d => d.Name == diverName);
+
+            if (diver.HasHealthIssues)
+            {
+                return $"{diverName} will not be allowed to dive, due to health issues.";
+            }
+
+            IFish fish = allFish.First(f => f.Name == fishName);
+
+            if (diver.OxygenLevel < fish.TimeToCatch)
+            {
+                diver.Miss(fish.TimeToCatch);
+
+                return $"{diverName} missed a good {fishName}.";
+            }
+            else if (diver.OxygenLevel == fish.TimeToCatch)
+            {
+                if (isLucky)
+                {
+                    diver.Hit(fish);
+
+                    return $"{diverName} hits a {fish.Points}pt. {fishName}.";
+                }
+                else
+                {
+                    diver.Miss(fish.TimeToCatch);
+
+                    return $"{diverName} missed a good {fishName}.";
+                }
+            }
+            else
+            {
+                diver.Hit(fish);
+
+                return $"{diverName} hits a {fish.Points}pt. {fishName}.";
+            }
+
+
         }
 
         public string CompetitionStatistics()
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("**Nautical-Catch-Challenge**");
+
+            foreach (IDiver diver in diverRepository.Models
+                .OrderByDescending(d => d.CompetitionPoints)
+                .ThenByDescending(d => d.Catch.Count)
+                .ThenBy(d => d.Name)
+                .Where(d => d.HasHealthIssues == false))
+            {
+                sb.AppendLine(diver.ToString());
+            }
+
+            return sb.ToString().TrimEnd();
         }
 
         public string DiveIntoCompetition(string diverType, string diverName)
@@ -47,17 +109,12 @@ namespace NauticalCatchChallenge.Core
                 return $"{diverName} is already a participant -> {typeof(DiverRepository).Name}.";
             }
 
-            IDiver diver = null;
+            Type type = Assembly
+                .GetEntryAssembly()
+                .GetTypes()
+                .First(t => t.Name == diverType);
 
-            if (diverType == "FreeDiver")
-            {
-                diver = new FreeDiver(diverName);
-                
-            }
-            else if (diverType == "ScubaDiver")
-            {
-                diver = new ScubaDiver(diverName);
-            }
+            IDiver diver = Activator.CreateInstance(type, diverName) as IDiver;
 
             diverRepository.AddModel(diver);
 
@@ -66,12 +123,44 @@ namespace NauticalCatchChallenge.Core
 
         public string DiverCatchReport(string diverName)
         {
-            throw new NotImplementedException();
+            IDiver diver = diverRepository.GetModel(diverName);
+
+            IReadOnlyCollection<string> caughtFish = diver.Catch;
+            IReadOnlyCollection<IFish> allFish = fishRepository.Models;
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(diver.ToString());
+            sb.AppendLine("Catch Report:");
+
+            foreach (var fish in caughtFish)
+            {
+                foreach (var repoFish in allFish.Where(rF => rF.Name == fish))
+                {
+                    sb.AppendLine(repoFish.ToString());
+                }
+            }
+
+            return sb.ToString().TrimEnd();
         }
 
         public string HealthRecovery()
         {
-            throw new NotImplementedException();
+            IReadOnlyCollection<IDiver> divers = diverRepository.Models;
+
+            int diversCounter = 0;
+
+            foreach (IDiver diver in divers)
+            {
+                if (diver.HasHealthIssues)
+                {
+                    diversCounter++;
+
+                    diver.UpdateHealthStatus();
+                    diver.RenewOxy();
+                }
+            }
+
+            return $"Divers recovered: {diversCounter}";
         }
 
         public string SwimIntoCompetition(string fishType, string fishName, double points)
@@ -92,11 +181,11 @@ namespace NauticalCatchChallenge.Core
             Type type = Assembly
                 .GetEntryAssembly()
                 .GetTypes()
-                .First(a => a.Name == fishType);
+                .First(t => t.Name == fishType);
 
             IFish fish = Activator.CreateInstance(type, fishName, points) as IFish;
 
-            fishRepository.AddModel(fish);  
+            fishRepository.AddModel(fish);
 
             return $"{fishName} is allowed for chasing.";
         }

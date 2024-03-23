@@ -20,6 +20,11 @@ namespace NauticalCatchChallenge.Models
         public override void Miss(int TimeToCatch)
         {
             this.OxygenLevel -= (int)Math.Round(0.3 * TimeToCatch, MidpointRounding.AwayFromZero);
+
+            if (this.OxygenLevel <= 0)
+            {
+                UpdateHealthStatus();
+            }
         }
 
         public override void RenewOxy()

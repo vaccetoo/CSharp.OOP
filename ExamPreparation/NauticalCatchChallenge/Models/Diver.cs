@@ -14,7 +14,7 @@ namespace NauticalCatchChallenge.Models
         private string name;
         private int oxygenLevel; // sec
         private List<string> caughtFish;
-        private double cometitionPoints = 0;
+        private double competitionPoints = 0;
         private bool hasHealthIssue = false;
 
         protected Diver(string name, int oxygenLevel)
@@ -58,7 +58,7 @@ namespace NauticalCatchChallenge.Models
             => caughtFish;
 
         public double CompetitionPoints
-            => cometitionPoints;
+            => competitionPoints;
 
         public virtual bool HasHealthIssues 
             => hasHealthIssue;
@@ -68,9 +68,14 @@ namespace NauticalCatchChallenge.Models
             int reducedOxygen = fish.TimeToCatch;
             OxygenLevel -= reducedOxygen;
 
+            if (OxygenLevel <= 0)
+            {
+                UpdateHealthStatus();
+            }
+
             caughtFish.Add(fish.Name);
 
-            cometitionPoints += fish.Points;
+            competitionPoints += fish.Points;
         }
 
         public abstract void Miss(int TimeToCatch);
@@ -91,6 +96,6 @@ namespace NauticalCatchChallenge.Models
 
 
         public override string ToString()
-            => $"Diver [ Name: {Name}, Oxygen left: {OxygenLevel}, Fish caught: {caughtFish.Count}, Points earned: {CompetitionPoints} ]";
+            => $"Diver [ Name: {Name}, Oxygen left: {OxygenLevel}, Fish caught: {caughtFish.Count}, Points earned: {CompetitionPoints:f1} ]";  
     }
 }
