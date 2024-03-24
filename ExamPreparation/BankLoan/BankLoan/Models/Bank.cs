@@ -75,21 +75,24 @@ namespace BankLoan.Models
         public string GetStatistics()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Name: {this.Name}, Type: {this.GetType().Name}");
-            sb.Append($"Clients: ");
 
-            if (this.clients.Count == 0)
+            sb.AppendLine($"Name: {Name}, Type: {GetType().Name}");
+            sb.Append("Clients: ");
+            if (clients.Count > 0)
             {
-                sb.AppendLine("none");
+                for (int i = 0; i < clients.Count; i++)
+                {
+                    sb.Append(clients[i].Name);
+                    if (i < clients.Count - 1)
+                        sb.Append(", ");
+                }
             }
             else
             {
-                var names = clients.Select(c => c.Name).ToArray();
-                foreach (var client in this.clients)
-                    sb.AppendLine(string.Join(", ", names));
+                sb.Append("none");
             }
-
-            sb.AppendLine($"Loans: {this.loans.Count}, Sum of Rates: {this.SumRates()}");
+            sb.AppendLine();
+            sb.AppendLine($"Loans: {loans.Count}, Sum of Rates: {SumRates()}");
 
             return sb.ToString().TrimEnd();
         }
