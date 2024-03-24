@@ -56,30 +56,17 @@ namespace NauticalCatchChallenge.Core
 
                 return $"{diverName} missed a good {fishName}.";
             }
-            else if (diver.OxygenLevel == fish.TimeToCatch)
+            else if (diver.OxygenLevel == fish.TimeToCatch && !isLucky)
             {
-                if (isLucky)
+                diver.Miss(fish.TimeToCatch);
+
+                if (diver.OxygenLevel <= 0)
                 {
-                    diver.Hit(fish);
-
-                    if (diver.OxygenLevel <= 0)
-                    {
-                        diver.UpdateHealthStatus();
-                    }
-
-                    return $"{diverName} hits a {fish.Points}pt. {fishName}.";
+                    diver.UpdateHealthStatus();
                 }
-                else
-                {
-                    diver.Miss(fish.TimeToCatch);
 
-                    if (diver.OxygenLevel <= 0)
-                    {
-                        diver.UpdateHealthStatus();
-                    }
+                return $"{diverName} missed a good {fishName}.";
 
-                    return $"{diverName} missed a good {fishName}.";
-                }
             }
             else
             {
@@ -106,7 +93,7 @@ namespace NauticalCatchChallenge.Core
                 .ThenByDescending(d => d.Catch.Count)
                 .ThenBy(d => d.Name))
             {
-                sb.AppendLine(diver.ToString().TrimEnd());
+                sb.AppendLine(diver.ToString());
             }
 
             return sb.ToString().TrimEnd();
@@ -144,18 +131,16 @@ namespace NauticalCatchChallenge.Core
 
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine(diver.ToString().TrimEnd());
+            sb.AppendLine(diver.ToString());
             sb.AppendLine("Catch Report:");
 
             foreach (string fish in diver.Catch)
             {
-                foreach (IFish repoFish in fishes.Models.Where(f => f.Name == fish))
-                {
-                    sb.AppendLine(repoFish.ToString().TrimEnd());
-                }
+                IFish currFish = fishes.GetModel(fish);
+                sb.AppendLine(currFish.ToString());
             }
 
-            return sb.ToString().TrimEnd();
+            return sb.ToString().Trim().TrimEnd();
         }
 
         public string HealthRecovery()
@@ -177,7 +162,7 @@ namespace NauticalCatchChallenge.Core
         {
             Type type = Assembly
                 .GetExecutingAssembly()
-                .GetTypes() 
+                .GetTypes()
                 .FirstOrDefault(t => t.Name == fishType);
 
             if (type == null)
@@ -190,7 +175,7 @@ namespace NauticalCatchChallenge.Core
                 return $"{fishName} is already allowed -> {typeof(FishRepository).Name}.";
             }
 
-            IFish fish = Activator.CreateInstance(type, fishName, points) as IFish; 
+            IFish fish = Activator.CreateInstance(type, fishName, points) as IFish;
 
             fishes.AddModel(fish);
 
