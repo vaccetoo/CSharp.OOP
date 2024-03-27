@@ -45,11 +45,7 @@ namespace NauticalCatchChallenge.Models
             get => oxygenLevel;
             protected set
             {
-                if (value < 0)
-                {
-                    oxygenLevel = 0;
-                }
-                oxygenLevel = value;
+                oxygenLevel = Math.Max(value, 0);
             }
         }
 
@@ -57,7 +53,7 @@ namespace NauticalCatchChallenge.Models
             => caughtFish;
 
         public double CompetitionPoints
-            => competitionPoints;
+            => Math.Round(competitionPoints, 1);
 
         public bool HasHealthIssues
             => hasHealthIssue;
@@ -82,7 +78,7 @@ namespace NauticalCatchChallenge.Models
 
 
         public override string ToString()
-            => $"Diver [ Name: {Name}, Oxygen left: {OxygenLevel}, Fish caught: {caughtFish.Count}, Points earned: {CompetitionPoints:f1} ]"
+            => $"Diver [ Name: {Name}, Oxygen left: {OxygenLevel}, Fish caught: {caughtFish.Count}, Points earned: {CompetitionPoints} ]"
 ;
     }
 }

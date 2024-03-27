@@ -49,7 +49,7 @@ namespace NauticalCatchChallenge.Core
             {
                 diver.Miss(fish.TimeToCatch);
 
-                if (diver.OxygenLevel <= 0)
+                if (diver.OxygenLevel == 0)
                 {
                     diver.UpdateHealthStatus();
                 }
@@ -60,7 +60,7 @@ namespace NauticalCatchChallenge.Core
             {
                 diver.Miss(fish.TimeToCatch);
 
-                if (diver.OxygenLevel <= 0)
+                if (diver.OxygenLevel == 0)
                 {
                     diver.UpdateHealthStatus();
                 }
@@ -72,7 +72,7 @@ namespace NauticalCatchChallenge.Core
             {
                 diver.Hit(fish);
 
-                if (diver.OxygenLevel <= 0)
+                if (diver.OxygenLevel == 0)
                 {
                     diver.UpdateHealthStatus();
                 }
