@@ -119,7 +119,13 @@ namespace Handball.Core
                 return $"{name} is already added to the {typeof(PlayerRepository).Name} as {player.GetType().Name}.";
             }
 
-            IPlayer newPlayer = Activator.CreateInstance(type, name) as IPlayer;
+            IPlayer newPlayer = typeName switch
+            {
+                "Goalkeeper" => new Goalkeeper(name),
+                "CenterBack" => new CenterBack(name),
+                "ForwardWing" => new ForwardWing(name),
+                _=> null,
+            };
 
             playerRepository.AddModel(newPlayer);
 
