@@ -31,6 +31,6 @@ namespace EDriveRent.Repositories
             => routes;
 
         public bool RemoveById(string identifier)
-            => routes.Remove(routes.First(r => r.RouteId == int.Parse(identifier)));
+            => routes.Remove(FindById(identifier));
     }
 }

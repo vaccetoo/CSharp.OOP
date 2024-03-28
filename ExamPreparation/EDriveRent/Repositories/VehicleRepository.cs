@@ -31,6 +31,6 @@ namespace EDriveRent.Repositories
             => vehicles;
 
         public bool RemoveById(string identifier)
-            => vehicles.Remove(vehicles.First(v => v.LicensePlateNumber == identifier));
+            => vehicles.Remove(FindById(identifier));
     }
 }

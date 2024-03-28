@@ -31,6 +31,6 @@ namespace EDriveRent.Repositories
             => users;
 
         public bool RemoveById(string identifier)
-            => users.Remove(users.First(u => u.DrivingLicenseNumber == identifier));
+            => users.Remove(FindById(identifier));
     }
 }
