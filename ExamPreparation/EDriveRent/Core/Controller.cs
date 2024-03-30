@@ -14,24 +14,24 @@ namespace EDriveRent.Core
 {
     public class Controller : IController
     {
-        private IRepository<IUser> userRepository;
-        private IRepository<IVehicle> vehicleRepository;
-        private IRepository<IRoute> routeRepository;
+        private IRepository<IUser> users;
+        private IRepository<IVehicle> vehicles;
+        private IRepository<IRoute> routes;
 
 
         public Controller()
         {
-            userRepository = new UserRepository();
-            vehicleRepository = new VehicleRepository();
-            routeRepository = new RouteRepository();
+            users = new UserRepository();
+            vehicles = new VehicleRepository();
+            routes = new RouteRepository();
         }
 
 
         public string AllowRoute(string startPoint, string endPoint, double length)
         {
-            int routId = routeRepository.GetAll().Count() + 1;
+            int routId = routes.GetAll().Count() + 1;
 
-            IRoute excistinRoute = routeRepository
+            IRoute excistinRoute = routes
                 .GetAll()
                 .FirstOrDefault(r => r.StartPoint == startPoint && r.EndPoint == endPoint);
 
@@ -52,16 +52,16 @@ namespace EDriveRent.Core
             }
 
             IRoute newRoute = new Route(startPoint, endPoint, length, routId);
-            routeRepository.AddModel(newRoute);
+            routes.AddModel(newRoute);
 
             return $"{startPoint}/{endPoint} - {length} km is unlocked in our platform.";
         }
 
         public string MakeTrip(string drivingLicenseNumber, string licensePlateNumber, string routeId, bool isAccidentHappened)
         {
-            IUser user = userRepository.FindById(drivingLicenseNumber);
-            IVehicle vehicle = vehicleRepository.FindById(licensePlateNumber);
-            IRoute route = routeRepository.FindById(routeId);
+            IUser user = users.FindById(drivingLicenseNumber);
+            IVehicle vehicle = vehicles.FindById(licensePlateNumber);
+            IRoute route = routes.FindById(routeId);
 
             //  The Vehicle will always have enough battery to finish the trip.
 
@@ -97,20 +97,20 @@ namespace EDriveRent.Core
 
         public string RegisterUser(string firstName, string lastName, string drivingLicenseNumber)
         {
-            if (userRepository.GetAll().Any(u => u.DrivingLicenseNumber == drivingLicenseNumber))
+            if (users.GetAll().Any(u => u.DrivingLicenseNumber == drivingLicenseNumber))
             {
                 return $"{drivingLicenseNumber} is already registered in our platform.";
             }
 
             IUser newUser = new User(firstName, lastName, drivingLicenseNumber);
-            userRepository.AddModel(newUser);
+            users.AddModel(newUser);
 
             return $"{firstName} {lastName} is registered successfully with DLN-{drivingLicenseNumber}";
         }
 
         public string RepairVehicles(int count)
         {
-            var damagedVehicles = vehicleRepository.GetAll()
+            var damagedVehicles = vehicles.GetAll()
                 .Where(v => v.IsDamaged)
                 .OrderBy(v => v.Brand)
                 .ThenBy(v => v.Model);
@@ -144,7 +144,7 @@ namespace EDriveRent.Core
                 return $"{vehicleType} is not accessible in our platform.";
             }
 
-            if (vehicleRepository.FindById(licensePlateNumber) != null)
+            if (vehicles.FindById(licensePlateNumber) != null)
             {
                 return $"{licensePlateNumber} belongs to another vehicle.";
             }
@@ -155,7 +155,7 @@ namespace EDriveRent.Core
                 "PassengerCar" => new PassengerCar(brand, model, licensePlateNumber),
             };
 
-            vehicleRepository.AddModel(newVehicle);
+            vehicles.AddModel(newVehicle);
 
             return $"{brand} {model} is uploaded successfully with LPN-{licensePlateNumber}";
         }
@@ -166,7 +166,7 @@ namespace EDriveRent.Core
 
             sb.AppendLine("*** E-Drive-Rent ***");
 
-            foreach (var user in userRepository.GetAll()
+            foreach (var user in users.GetAll()
                 .OrderByDescending(u => u.Rating)
                 .ThenBy(u => u.LastName)
                 .ThenBy(u => u.FirstName))
