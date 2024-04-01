@@ -95,25 +95,7 @@ namespace ChristmasPastryShop.Core
         {
             IBooth booth = booths.Models.First(b => b.BoothId == boothId);
 
-            StringBuilder sb = new StringBuilder();
-
-            sb.AppendLine($"Booth: {boothId}");
-            sb.AppendLine($"Capacity: {booth.Capacity}");
-            sb.AppendLine($"Turnover: {booth.Turnover:f2} lv");
-
-            sb.AppendLine("-Cocktail menu:");
-            foreach (var coctail in booth.CocktailMenu.Models)
-            {
-                sb.AppendLine($"--{coctail.ToString()}");
-            }
-
-            sb.AppendLine("-Delicacy menu:");
-            foreach (var delicacy in booth.DelicacyMenu.Models)
-            {
-                sb.AppendLine($"--{delicacy.ToString()}");
-            }
-
-            return sb.ToString().TrimEnd();
+            return booth.ToString();
         }
 
         public string LeaveBooth(int boothId)

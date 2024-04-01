@@ -91,14 +91,14 @@ namespace ChristmasPastryShop.Models.Booths
 
             foreach (var coctail in cocktails.Models)
             {
-                sb.AppendLine(coctail.ToString());
+                sb.AppendLine($"--{coctail.ToString()}");
             }
 
             sb.AppendLine($"-Delicacy menu:");
 
             foreach (var delicacy in delicacies.Models)
             {
-                sb.AppendLine(delicacy.ToString());
+                sb.AppendLine($"--{delicacy.ToString()}");
             }
 
             return sb.ToString().TrimEnd();
