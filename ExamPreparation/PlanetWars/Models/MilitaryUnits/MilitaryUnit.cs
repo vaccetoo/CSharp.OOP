@@ -22,14 +22,14 @@ namespace PlanetWars.Models.MilitaryUnits
 
         public void IncreaseEndurance()
         {
-            enduranceLevel++;
-
-            if (enduranceLevel > 20)
+            if (enduranceLevel >= 20)
             {
                 enduranceLevel = 20;
 
                 throw new ArgumentException("Endurance level cannot exceed 20 power points.");
             }
+
+            enduranceLevel++;
         }
     }
 }

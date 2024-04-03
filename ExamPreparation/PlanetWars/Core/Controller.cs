@@ -49,11 +49,11 @@ namespace PlanetWars.Core
             {
                 "AnonymousImpactUnit" => new AnonymousImpactUnit(),
                 "SpaceForces" => new SpaceForces(),
-                "StormTroopers" => new SpaceForces()
+                "StormTroopers" => new StormTroopers()
             };
 
-            planet.AddUnit(militaryUnit);
             planet.Spend(militaryUnit.Cost);
+            planet.AddUnit(militaryUnit);
 
             return $"{unitTypeName} added successfully to the Army of {planetName}!";
         }
@@ -86,8 +86,8 @@ namespace PlanetWars.Core
                 "SpaceMissiles" => new SpaceMissiles(destructionLevel)
             };
 
-            planet.AddWeapon(weapon);
             planet.Spend(weapon.Price);
+            planet.AddWeapon(weapon);
 
             return $"{planetName} purchased {weaponTypeName}!";
         }
@@ -114,7 +114,6 @@ namespace PlanetWars.Core
             foreach (IPlanet planet in planets.Models.OrderByDescending(p => p.MilitaryPower).ThenBy(p => p.Name))
             {
                 sb.AppendLine(planet.PlanetInfo());
-                sb.AppendLine();
             }
 
             return sb.ToString().TrimEnd();
@@ -191,13 +190,13 @@ namespace PlanetWars.Core
 
             IPlanet planet = planets.FindByName(planetName);
 
-            if (!planet.Weapons.Any())
+            if (!planet.Army.Any())
             {
                 throw new InvalidOperationException("No units available for upgrade!");
             }
 
-            planet.Spend(1.25);
             planet.TrainArmy();
+            planet.Spend(1.25);
 
             return $"{planetName} has upgraded its forces!";
         }

@@ -43,7 +43,7 @@ namespace PlanetWars.Models.Planets
 
         public double Budget
         {
-            get => budget; 
+            get => budget;
             private set
             {
                 if (value < 0)
@@ -57,10 +57,10 @@ namespace PlanetWars.Models.Planets
         public double MilitaryPower
             => CalculatemilitaryPower();
 
-        public IReadOnlyCollection<IMilitaryUnit> Army 
+        public IReadOnlyCollection<IMilitaryUnit> Army
             => units.Models;
 
-        public IReadOnlyCollection<IWeapon> Weapons 
+        public IReadOnlyCollection<IWeapon> Weapons
             => weapons.Models;
 
         public void AddUnit(IMilitaryUnit unit)
@@ -74,7 +74,6 @@ namespace PlanetWars.Models.Planets
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine($"Planet: {Name}");
-            sb.AppendLine();
             sb.AppendLine($"--Budget: {Budget} billion QUID");
 
             if (units.Models.Any())
@@ -99,7 +98,7 @@ namespace PlanetWars.Models.Planets
 
             sb.AppendLine($"--Military Power: {MilitaryPower}");
 
-            return sb.ToString().TrimEnd();
+            return sb.ToString().Trim();
         }
 
         public void Profit(double amount)
@@ -109,14 +108,12 @@ namespace PlanetWars.Models.Planets
 
         public void Spend(double amount)
         {
-            if (Budget - amount < 0)
+            if (amount > Budget)
             {
                 throw new ArgumentException("Budget too low!");
             }
-            else
-            {
-                Budget -= amount;
-            }
+
+            Budget -= amount;
         }
 
         public void TrainArmy()
@@ -129,16 +126,28 @@ namespace PlanetWars.Models.Planets
 
         private double CalculatemilitaryPower()
         {
-            double totalAmount = weapons
-                .Models
-                .Sum(w => w.DestructionLevel) + units.Models.Sum(u => u.EnduranceLevel);
+            //double totalAmount = weapons
+            //    .Models
+            //    .Sum(w => w.DestructionLevel) + units.Models.Sum(u => u.EnduranceLevel);
+
+            double totalAmount = 0;
+
+            foreach (var itemUnit in units.Models)
+            {
+                totalAmount += itemUnit.EnduranceLevel;
+            }
+
+            foreach (var weapon in weapons.Models)
+            {
+                totalAmount += weapon.DestructionLevel;
+            }
 
             if (units.Models.Any(u => u.GetType().Name == nameof(AnonymousImpactUnit)))
             {
                 totalAmount += totalAmount * 0.3;
             }
 
-            if (weapons.Models.Any(w => w.GetType().Name == nameof(NuclearWeapon)))
+            if (weapons.Models.Any(w => w.GetType().Name == nameof(NuclearWeapon))) 
             {
                 totalAmount += totalAmount * 0.45;
             }
