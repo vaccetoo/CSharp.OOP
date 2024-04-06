@@ -35,7 +35,7 @@ namespace PlanetWars.Models.Planets
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentNullException("Planet name cannot be null or empty.");
+                    throw new ArgumentException("Planet name cannot be null or empty.");
                 }
                 name = value;
             }

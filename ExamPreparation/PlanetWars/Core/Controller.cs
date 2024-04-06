@@ -62,7 +62,7 @@ namespace PlanetWars.Core
         {
             if (planets.FindByName(planetName) == null)
             {
-                throw new InvalidOperationException("Planet {planetName} does not exist!");
+                throw new InvalidOperationException($"Planet {planetName} does not exist!");
             }
 
             IPlanet planet = planets.FindByName(planetName);
